@@ -1,4 +1,4 @@
-package kr.disdong.spring.reflection.test.srt.jackson
+package kr.disdong.spring.reflection.test.srt.jpa
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

@@ -1,7 +1,8 @@
 rootProject.name = "spring-reflection-test"
 
 include(
-    "srt-jackson"
+    "srt-jackson",
+    "srt-jpa"
 )
 
 enableFeaturePreview("VERSION_CATALOGS")
