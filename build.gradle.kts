@@ -39,7 +39,6 @@ subprojects {
         implementation(platform(libs.spring.cloud.dependencies))
         implementation(libs.kotlin.reflect)
         implementation(libs.kotlin.stdlib.jdk8)
-        implementation(libs.jackson.module.kotlin)
         implementation(libs.spring.boot.configuration.processor)
         implementation(libs.springdoc.openapi.starter.webmvc.ui)
 

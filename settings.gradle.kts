@@ -1,9 +1,7 @@
-rootProject.name = "gradle-multi-module-template"
+rootProject.name = "spring-reflection-test"
 
 include(
-    "subprojects:domain",
-    "subprojects:domain-jpa",
-    "subprojects:server"
+    "srt-jackson"
 )
 
 enableFeaturePreview("VERSION_CATALOGS")
