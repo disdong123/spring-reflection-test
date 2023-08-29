@@ -9,12 +9,12 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-internal class JacksonApplicationKtTest {
+internal class BasicTest {
 
     private val objectMapper: ObjectMapper = ObjectMapper()
 
     @Nested
-    @DisplayName("objectMapper 는 기본적으로 public 필드 혹은 public 형태의 getX 메서드만 접근가능하므로")
+    @DisplayName("objectMapper 는 기본적으로 리플렉션을 이용하여 public 필드 혹은 public 형태의 getX 메서드만 접근가능하므로")
     inner class VisibilitySerializeTest {
         @Test
         fun `필드가 public 인 경우에만 정상적으로 직렬화한다`() {
