@@ -6,6 +6,85 @@ import org.springframework.util.StopWatch
 import kotlin.reflect.KClass
 import kotlin.reflect.full.primaryConstructor
 
+fun test(loopCount: Int, request: () -> Unit) {
+    val logger = LoggerFactory.getLogger("test")
+    val functionTimer = StopWatch()
+
+    functionTimer.start()
+    for (i in 1..loopCount) {
+        request()
+    }
+    functionTimer.stop()
+
+    logger.info("Total: ${functionTimer.totalTimeSeconds}")
+}
+
+class PerformanceTest {
+    @Test
+    fun `멤버변수가 적을 때 reflection 을 사용한 경우`() {
+        test(100000) {
+            val memberClass: KClass<SmallMember> = SmallMember::class
+            val constructor = memberClass.primaryConstructor!!
+
+            val parameters = constructor.parameters.map { parameter ->
+                when (parameter.type.classifier) {
+                    Int::class -> 0
+                    String::class -> ""
+                    Double::class -> 0.0
+                    else -> throw IllegalArgumentException("Unknown parameter type: ${parameter.type}")
+                }
+            }
+
+            constructor.call(*parameters.toTypedArray())
+        }
+    }
+
+    @Test
+    fun `멤버변수가 많을 때 reflection 을 사용한 경우`() {
+        test(100000) {
+            val memberClass: KClass<MediumMember> = MediumMember::class
+            val constructor = memberClass.primaryConstructor!!
+
+            val parameters = constructor.parameters.map { parameter ->
+                when (parameter.type.classifier) {
+                    Int::class -> 0
+                    String::class -> ""
+                    Double::class -> 0.0
+                    else -> throw IllegalArgumentException("Unknown parameter type: ${parameter.type}")
+                }
+            }
+
+            constructor.call(*parameters.toTypedArray())
+        }
+    }
+
+    @Test
+    fun `멤버변수가 매우 많을 때 reflection 을 사용한 경우`() {
+        test(100000) {
+            val memberClass: KClass<BigMember> = BigMember::class
+            val constructor = memberClass.primaryConstructor!!
+
+            val parameters = constructor.parameters.map { parameter ->
+                when (parameter.type.classifier) {
+                    Int::class -> 0
+                    String::class -> ""
+                    Double::class -> 0.0
+                    else -> throw IllegalArgumentException("Unknown parameter type: ${parameter.type}")
+                }
+            }
+
+            constructor.call(*parameters.toTypedArray())
+        }
+    }
+
+    @Test
+    fun `reflection 을 사용하지 않은 경우`() {
+        test(100000) {
+            BigMember(0, "", 0.0, 0, "", 0.0, 0, "", 0.0, 0, "", 0.0, 0, "", 0.0, 0, "", 0.0, 0, "", 0.0, 0, "", 0.0, 0, "", 0.0, 0, "", 0.0, 0, "", 0.0, 0, "", 0.0, 0, "", 0.0, 0, "", 0.0, 0, "", 0.0, 0, "", 0.0, 0, "", 0.0, 0, "", 0.0, 0, "", 0.0, 0, "", 0.0, 0, "", 0.0, 0, "", 0.0, 0, "", 0.0, 0, "", 0.0, 0, "", 0.0, 0, "", 0.0)
+        }
+    }
+}
+
 data class SmallMember(
     val a1: Int,
     val b1: String,
@@ -137,82 +216,3 @@ data class BigMember(
     val y3: String,
     val z3: Double,
 )
-
-fun test(loopCount: Int, request: () -> Unit) {
-    val logger = LoggerFactory.getLogger("test")
-    val functionTimer = StopWatch()
-
-    functionTimer.start()
-    for (i in 1..loopCount) {
-        request()
-    }
-    functionTimer.stop()
-
-    logger.info("Total: ${functionTimer.totalTimeSeconds}")
-}
-
-class PerformanceTest {
-    @Test
-    fun `멤버변수가 적을 때 reflection 을 사용한 경우`() {
-        test(100000) {
-            val memberClass: KClass<SmallMember> = SmallMember::class
-            val constructor = memberClass.primaryConstructor!!
-
-            val parameters = constructor.parameters.map { parameter ->
-                when (parameter.type.classifier) {
-                    Int::class -> 0
-                    String::class -> ""
-                    Double::class -> 0.0
-                    else -> throw IllegalArgumentException("Unknown parameter type: ${parameter.type}")
-                }
-            }
-
-            constructor.call(*parameters.toTypedArray())
-        }
-    }
-
-    @Test
-    fun `멤버변수가 많을 때 reflection 을 사용한 경우`() {
-        test(100000) {
-            val memberClass: KClass<MediumMember> = MediumMember::class
-            val constructor = memberClass.primaryConstructor!!
-
-            val parameters = constructor.parameters.map { parameter ->
-                when (parameter.type.classifier) {
-                    Int::class -> 0
-                    String::class -> ""
-                    Double::class -> 0.0
-                    else -> throw IllegalArgumentException("Unknown parameter type: ${parameter.type}")
-                }
-            }
-
-            constructor.call(*parameters.toTypedArray())
-        }
-    }
-
-    @Test
-    fun `멤버변수가 매우 많을 때 reflection 을 사용한 경우`() {
-        test(100000) {
-            val memberClass: KClass<BigMember> = BigMember::class
-            val constructor = memberClass.primaryConstructor!!
-
-            val parameters = constructor.parameters.map { parameter ->
-                when (parameter.type.classifier) {
-                    Int::class -> 0
-                    String::class -> ""
-                    Double::class -> 0.0
-                    else -> throw IllegalArgumentException("Unknown parameter type: ${parameter.type}")
-                }
-            }
-
-            constructor.call(*parameters.toTypedArray())
-        }
-    }
-
-    @Test
-    fun `reflection 을 사용하지 않은 경우`() {
-        test(100000) {
-            BigMember(0, "", 0.0, 0, "", 0.0, 0, "", 0.0, 0, "", 0.0, 0, "", 0.0, 0, "", 0.0, 0, "", 0.0, 0, "", 0.0, 0, "", 0.0, 0, "", 0.0, 0, "", 0.0, 0, "", 0.0, 0, "", 0.0, 0, "", 0.0, 0, "", 0.0, 0, "", 0.0, 0, "", 0.0, 0, "", 0.0, 0, "", 0.0, 0, "", 0.0, 0, "", 0.0, 0, "", 0.0, 0, "", 0.0, 0, "", 0.0, 0, "", 0.0, 0, "", 0.0)
-        }
-    }
-}

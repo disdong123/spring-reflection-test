@@ -2,7 +2,7 @@ rootProject.name = "spring-reflection-test"
 
 include(
     "srt-jackson",
-    "srt-jpa"
+    "srt-transactional",
 )
 
 enableFeaturePreview("VERSION_CATALOGS")
